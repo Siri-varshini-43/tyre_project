@@ -15,7 +15,7 @@ class CarRequestHandler(BaseHTTPRequestHandler):
         return unquote(text).strip().lower()
 
     def _get_car_data(self, brand, model):
-        client = MongoClient('mongodb+srv://Siri_varshini:sahi2002@cluster0.ikhcjpi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+        client = MongoClient('mongodb+srv://USER_NAME:PASSWORD@cluster0.ikhcjpi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
         db = client['CarData']
         cars = db['cars']
         
