@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  
+  <!-- Boxicons for social media icons -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  
+  <title>Car Maintenance Dashboard</title>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="logo">🚗 Car Maintenance</div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <i class='bx bx-menu'></i>
+    </div>
+    <ul class="nav-links">
+      <a href="/" class="active">Home</a>
+
+      
+    <li><a href="{{ url_for('tyres_dashboard') }}">Dashboard</a></li>
+    <li><a href="http://127.0.0.1:5500/services/index.html">Go to Services</a></li>
+    <li><a href="http://127.0.0.1:5500/Car_models/index.html">Car Model</a></li>
+
+
+      <!-- Add this to your car.html where you want user details -->
+      <li>
+        <div class="user-menu">
+          <i class='bx bx-user-circle user-icon'></i>
+          <div class="user-dropdown" id="userDropdown">
+              <div class="dropdown-content">
+                <p>Hey <span id="user-name-value">{{ name }}</span></p><br>
+                <p><span id="user-email-value">{{ email }}</span></p><br>
+                <p><span id="user-phone-value">{{ phone }}</span></p><br>
+                <p>Car model: <span id="user-car-model-value">{{ car_model }}</span></p><br>
+                <p>Car Brand: <span id="user-car-brand-value">{{ car_brand }}</span></p>
+                  <a href="#" id="logoutLink">Logout</a>
+                  <a href="#" id="DeleteLink">Delete Account</a>
+              </div>
+          </div>
+      </div>
+      
+    </li>
+      
+    </ul>
+
+  </nav>
+
+  <div class="hero">
+    <h1>Keep Your Car in Top Condition!</h1>
+    <p>Track tyre health, service dates, and car performance in one place.</p>
+  </div>
+
+  <section class="features">
+    <div class="feature" onclick="redirectToPage('/tyres/index.html')">
+      <img src="{{ url_for('static', filename='images.jpg') }}" alt="Image Description">
+      <h3>Tyre Monitoring</h3>
+      <p>Track the pressure and health of your car tyres in real-time.</p>
+    </div>
+    <div class="feature" onclick="redirectToPage('/services')">
+      <img src="{{ url_for('static', filename='Tyre-Repair.webp') }}" alt="Tyre Repair">
+      <h3>Service Tracking</h3>
+      <p>Keep records of your last service date and upcoming maintenance.</p>
+    </div>
+    <div class="feature" onclick="redirectToPage('/Car-models')">
+      <img src="{{ url_for('static', filename='tires-atlanta-1.jpg') }}" alt="Tires Atlanta">
+      <h3>Car Models</h3>
+      <p>Customize settings based on your specific car model.</p>
+    </div>
+    
+  </section>
+
+  <footer class="foot">
+    <div class="social">
+      <a href="#" target="_blank"><i class='bx bxl-linkedin-square'></i></a>
+      <a href="#" target="_blank"><i class='bx bxl-telegram'></i></a>
+      <a href="#" target="_blank"><i class='bx bxl-instagram'></i></a>
+      <a href="#" target="_blank"><i class='bx bxl-snapchat'></i></a>
+    </div>
+    <div class="list">
+      <ul class="list1">
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">About Me</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+      <p class="copy-right">&copy; <span id="year"></span> SiriVarshini | All rights reserved</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
