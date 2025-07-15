@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <style>
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #5e6773;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+}
+
+/* Login Container */
+.login-container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  padding: 30px;
+  width: 90%;
+  max-width: 350px;
+  transition: all 0.3s ease;
+}
+
+/* Header */
+.login-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* Form Elements - Side by Side */
+.form-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.form-row label {
+  width: 100px;
+  margin-right: 15px;
+  font-weight: 500;
+  color: #2c3e50;
+  text-align: right;
+}
+
+.form-row input {
+  flex: 1;
+  padding: 10px 12px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.3s;
+}
+
+.form-row input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  outline: none;
+}
+
+/* Button */
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 10px;
+}
+
+button[type="submit"]:hover {
+  background-color: #2980b9;
+  transform: translateY(-1px);
+}
+
+button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* Switch Form Link */
+.switch-form {
+  text-align: center;
+  margin-top: 20px;
+  color: #7f8c8d;
+  font-size: 14px;
+}
+
+.switch-form a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.switch-form a:hover {
+  text-decoration: underline;
+}
+
+/* Animation Effects */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-container {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+  </style>
+
+</head>
+<body>
+  <div class="login-container">
+    <h2>Login</h2>
+    <form id="loginForm">
+      <div class="form-row">
+        <label for="loginEmail">Email:</label>
+        <input type="email" id="loginEmail" name="email" required>
+      </div>
+
+      <div class="form-row">
+        <label for="loginPassword">Password:</label>
+        <input type="password" id="loginPassword" name="password" required>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+
+    <div class="switch-form">
+      <p>Don't have an account? <a href="register.html">Register here</a></p>
+    </div>
+  </div>
+
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorElement = document.getElementById('loginError');
+
+            try {
+                const response = await fetch('http://127.0.0.1:5002/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    // Store user data in localStorage
+                    if (result.user) {
+                        localStorage.setItem('userData', JSON.stringify(result.user));
+                    } else {
+                        // If user data isn't returned, fetch it separately
+                        const userResponse = await fetch(`http://127.0.0.1:5002/api/user?email=${encodeURIComponent(email)}`);
+                        if (userResponse.ok) {
+                            const userData = await userResponse.json();
+                            localStorage.setItem('userData', JSON.stringify(userData));
+                        }
+                    }
+                    
+                    // Redirect to dashboard or home page after successful login
+                    window.location.href = 'http://127.0.0.1:5006';
+                } else {
+                    errorElement.textContent = result.error || 'Login failed. Please try again.';
+                }
+            } catch (error) {
+                console.error('Login failed:', error);
+                errorElement.textContent = 'Login failed. Please try again.';
+            }
+        });
+
+        // Function to update user dropdown (will be used after redirect)
+        function updateUserDropdown(userData) {
+            if (!userData) return;
+            
+            const elements = {
+                'user-name': `Hi, ${userData.name || 'User'}`,
+                'user-email': userData.email || 'Registered Email',
+                'user-phone': userData.phone || 'Registered Phone number',
+                'user-car-model': userData.carModel ? `Car Model: ${userData.carModel}` : 'Your car model',
+                'user-car-brand': userData.carBrand ? `Car Brand: ${userData.carBrand}` : 'Your car brand'
+            };
+            
+            Object.entries(elements).forEach(([id, text]) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = text;
+            });
+        }
+  </script>
+</body>
+</html>

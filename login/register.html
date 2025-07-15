@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Car Registration</title>
+  <script src="script.js" defer></script>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  background: #585c62;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.login-container {
+  background: white;
+  width: 100%;
+  max-width: 300px;
+  padding: 25px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+h2 {
+  color: #2d3436;
+  text-align: center;
+  margin: 0 0 20px 0;
+  font-size: 20px;
+}
+.form-row {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: center;
+}
+.form-row label {
+  width: 80px;
+  color: #2d3436;
+  font-size: 14px;
+}
+.form-row input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+button {
+  width: 100%;
+  padding: 10px;
+  background: #2980b9;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.switch-form {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 13px;
+}
+.switch-form a {
+  color: #2980b9;
+  text-decoration: none;
+}
+</style>
+  </style>
+</head>
+<body>
+  <div class="login-container">
+  <form id="registerForm">  <!-- Added ID here -->
+    <label>Name:</label>
+    <input type="text" name="name" id="name" required><br><br>
+
+    <label>Email:</label>
+    <input type="email" name="email" id="email" required><br><br>
+
+    <label>Phone Number:</label>
+    <input type="text" name="phone" id="phone" required><br><br>
+
+    <label>Password:</label>
+    <input type="password" name="password" id="password" required><br><br>
+
+    <label>Brand:</label>
+    <select id="brand" name="brand" required>
+      <option value="" disabled selected>Loading brands...</option>
+    </select><br><br>
+
+    <label>Model:</label>
+    <select id="model" name="model" required disabled>
+      <option value="" disabled selected>Select brand first</option>
+    </select><br><br>
+
+    <!-- <label>Last Service Date:</label>   Added this field 
+    <input type="date" name="lastService" id="lastService" required><br><br> -->
+
+    <button type="submit">Register</button>
+
+    <div class="switch-form">
+      <p>Already Registered <a href="login.html">Login here</a></p>
+    </div>
+  </form>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
