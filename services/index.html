@@ -1,0 +1,291 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Service Date Tracker</title>
+        <style>
+            /* General Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  height: 100vh;
+  background: url('guide_detail_maintenanceg_tyres_image_640w_360h.jpg') no-repeat center center/cover;
+  color: #333333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.6);
+  z-index: -1;
+}
+
+/* Overlay */
+.overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Container Styling */
+.container {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  width: 360px;
+  text-align: center;
+  color: #1e1e1e;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+/* Heading Styling */
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #3a7bd5;
+}
+
+/* Form Styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-size: 16px;
+  color: #555;
+  text-align: left;
+  margin-bottom: -10px;
+}
+
+/* Date Picker */
+input[type="date"] {
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  background-color: #fafafa;
+  color: #333;
+  transition: border-color 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+input[type="date"]:focus {
+  border-color: #3a7bd5;
+  box-shadow: 0 0 10px rgba(58, 123, 213, 0.3);
+}
+
+/* Enhanced Button */
+.btn {
+  background-color: #3a7bd5;
+  color: #ffffff;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  letter-spacing: 0.5px;
+}
+
+.btn:hover {
+  background-color: #2f6bb5;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Display Saved Date */
+#lastService {
+  margin-top: 20px;
+  font-size: 18px;
+  color: #1e1e1e;
+}
+
+#savedDate {
+  font-weight: bold;
+  color: #3a7bd5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+      width: 75%;
+      max-width: 280px;
+      padding: 20px;
+  }
+
+  h1 {
+      font-size: 18px;
+  }
+
+  label {
+      font-size: 14px;
+  }
+
+  input[type="date"] {
+      padding: 12px;
+      font-size: 14px;
+  }
+
+  .btn {
+      padding: 14px 20px;
+      font-size: 16px;
+  }
+
+  #lastService {
+      font-size: 14px;
+  }
+}
+.saved-date-container {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: rgba(58, 123, 213, 0.1);
+  border-radius: 8px;
+  border-left: 4px solid #3a7bd5;
+}
+
+.saved-date-container h3 {
+  color: #3a7bd5;
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+#displayDate {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2f6bb5;
+  background-color: white;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+        </style>
+    </head>
+    <body >
+        <div class="overlay">
+            <div class="container">
+                <div class="header">
+                    <h2>Set Your Last Service Date</h2>
+                    <div class="divider"></div>
+                </div>
+                <div class="form-container">
+                    <form id="serviceForm">
+                        <div class="form-group">
+                            <label for="service_date">Last Service Date:</label>
+                            <input type="date" id="service_date" name="service_date" required>
+                        </div>
+                        <div class="button-container">
+                            <button type="submit" id="submitBtn" class="btn">Save Date</button>
+                        </div>
+                        </form>
+                        
+                        <div class="status-container">
+                            <div id="message" class="message"></div>
+                            <div class="last-service" id="lastService" style="display:none;">
+                                Last saved: <span id="savedDate"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    <script>
+       const form = document.getElementById('serviceForm');
+const messageDiv = document.getElementById('message');
+const submitBtn = document.getElementById('submitBtn');
+
+// Load saved date when page loads (but don't set it in the calendar input)
+document.addEventListener('DOMContentLoaded', () => {
+    const savedDate = localStorage.getItem('lastServiceDate');
+    if (savedDate) {
+        // Display in the bottom "Last saved" section
+        document.getElementById('savedDate').textContent = savedDate;
+        document.getElementById('lastService').style.display = 'block';
+        
+        // Explicitly clear the calendar input
+        document.getElementById('service_date').value = '';
+    }
+});
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitBtn.disabled = true;
+    messageDiv.style.display = 'none';
+
+    const serviceDate = document.getElementById('service_date').value;
+    
+    if (!serviceDate) {
+        showMessage('Please select a date', 'error');
+        submitBtn.disabled = false;
+        return;
+    }
+
+    try {
+        console.log('Sending request...');
+        const response = await fetch('http://localhost:5003/save_date', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ service_date: serviceDate })
+        });
+
+        const data = await response.json();
+        console.log('Response:', data);
+
+        if (response.ok && data.success) {
+            showMessage(data.message, 'success');
+            
+            // Save to localStorage and update display
+            localStorage.setItem('lastServiceDate', serviceDate);
+            document.getElementById('savedDate').textContent = serviceDate;
+            document.getElementById('lastService').style.display = 'block';
+            
+            // Clear the calendar input after successful submission
+            document.getElementById('service_date').value = '';
+        } else {
+            showMessage(data.error || 'Request failed', 'error');
+        }
+    } catch (error) {
+        console.error('Fetch error:', error);
+        showMessage('Network error. Please try again.', 'error');
+    } finally {
+        submitBtn.disabled = false;
+    }
+});
+
+function showMessage(text, type) {
+    messageDiv.textContent = text;
+    messageDiv.className = type;
+    messageDiv.style.display = 'block';
+}
+</script>
+</body>
+</html>
