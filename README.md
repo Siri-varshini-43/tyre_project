@@ -53,8 +53,7 @@ Have a look at the live preview screenshots:
 ## 🚀 Clone the Project
 
 ```bash
-git clone https://github.com/your-username/tyre_project.git
-cd tyre_project
+https://github.com/Siri-varshini-43/tyre_project
 
 ```
 ---
